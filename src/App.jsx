@@ -2,13 +2,38 @@ import { useState } from "react";
 
 import Player from "./components/Player";
 import Gameboard from "./components/Gameboard";
+import Log from "./components/Log";
 
 function App() {
 
+  // Defining states up here
+  const [gameTurns, setGameTurns] = useState ([]);
   const [ activePlayer, setActivePlayer ] = useState('X');
 
-  function handleSelectSquare() {
+
+  // Function to handle selection of boxes
+  // Params: Index of the row, Index of the column
+  function handleSelectSquare(rowIndex, colIndex) {
+
+    // sets current active player value to X, even if its O its now X
     setActivePlayer((currentActivePlayer) => currentActivePlayer === 'X' ? 'O' : 'X');
+
+    setGameTurns(prevTurns => {
+
+      let currentPlayer = 'X';
+
+      // only works if there is at least 1 turn executed
+      // first element is always latest because of how we use updatedTurns
+      // changes the current player to O
+      if (prevTurns.length > 0 && prevTurns[0].player === 'X'){
+        currentPlayer = 'O';
+      }
+
+      // immutable copy  to avoid errors later
+      const updatedTurns = [ { square: {row: rowIndex, col: colIndex}  , player : currentPlayer}, ...prevTurns];
+ 
+      return updatedTurns;
+    }); 
 
     console.log(activePlayer);
   }
@@ -24,8 +49,10 @@ function App() {
         </ol>
         <Gameboard 
         onSelectSquare = {handleSelectSquare}
-        activePlayerSymbol = {activePlayer}/>
+        turns = {gameTurns}
+        />
       </div>
+      <Log />
     </main>
   );
 }

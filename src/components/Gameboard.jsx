@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 const initialGameBoard = [
   [null, null, null],
@@ -6,26 +5,39 @@ const initialGameBoard = [
   [null, null, null],
 ];
 
-export default function Gameboard({ onSelectSquare , activePlayerSymbol}) {
+export default function Gameboard({ onSelectSquare , activePlayerSymbol, turns}) {
 
-    const [gameBoard, setGameBoard] = useState(initialGameBoard);
+    let gameBoard = initialGameBoard;
+
+    // if turns is empty the loop wont execute
+    for (const turn of turns ){
+      // pulls out the square and the player of the turn
+      const { square, player } = turn;
+      const { row, col } = square;
+
+      gameBoard[row][col] = player;
+
+    }
+
+
+    // const [gameBoard, setGameBoard] = useState(initialGameBoard);
 
     // needs to take symbol, too complex so X first
     // immutable updates - meaning ur updating a copy. not the direct memory(reference type)
-      function handleSelectSquare(rowIndex, columnIndex) {
-        setGameBoard((prevGameBoard) => {
-          // we make copies of the gameBoard, as its a reference type, meaning we're not manipulating our direct array, but its copy to avoid issues
-          const updatedBoard = [
-            ...prevGameBoard.map((innerArray) => [...innerArray]),
-          ];
+    //   function handleSelectSquare(rowIndex, columnIndex) {
+    //     setGameBoard((prevGameBoard) => {
+    // we make copies of the gameBoard, as its a reference type, meaning we're not manipulating our direct array, but its copy to avoid issues
+    //       const updatedBoard = [
+    //         ...prevGameBoard.map((innerArray) => [...innerArray]),
+    //       ];
 
-          // just gives X to every square
-          updatedBoard[rowIndex][columnIndex] = activePlayerSymbol;
-          return updatedBoard;
-        });
+    // just gives X or O to every square
+    //       updatedBoard[rowIndex][columnIndex] = activePlayerSymbol;
+    //       return updatedBoard;
+    //     });
 
-        onSelectSquare();
-    }
+    //     onSelectSquare();
+    // }
 
   return (
     <ol id="game-board">
@@ -40,7 +52,7 @@ export default function Gameboard({ onSelectSquare , activePlayerSymbol}) {
               <li key={columnIndex}>
                 {/* When clicked this button calls handleSelectSquare */}
                 <button
-                  onClick={() => handleSelectSquare(rowIndex, columnIndex)}
+                  onClick={() => onSelectSquare(rowIndex, columnIndex)}
                 >
                   {playerSymbol}
                 </button>
