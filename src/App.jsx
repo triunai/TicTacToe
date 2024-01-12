@@ -43,12 +43,12 @@ function App() {
 
       // immutable copy  to avoid errors later
       const updatedTurns = [ { square: {row: rowIndex, col: colIndex}  , player : currentPlayer}, ...prevTurns];
-      
-      console.log('This is the current player -nvm remember react updates async-ly ',currentPlayer);
       return updatedTurns;
     }); 
 
-    console.log('This is the active player -from outside the setter',activePlayer);
+    console.log('This is the active player -from outside the setter, remmeber react uses async updates',activePlayer);
+
+    console.log('Check if buttons can be pressed again, USE DISABLED HTML ATTRIBUTE')
   }
 
   return (
